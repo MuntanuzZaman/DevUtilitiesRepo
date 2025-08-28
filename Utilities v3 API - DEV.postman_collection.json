@@ -1,0 +1,5839 @@
+{
+	"info": {
+		"_postman_id": "705ab6b6-daf4-44a4-8ca7-57e063f1bbcf",
+		"name": "Utilities v3 API - DEV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47739249",
+		"_collection_link": "https://u22222-4614.postman.co/workspace/CloudApper-API-Validations~161d47c3-2ad3-416e-a790-a3731d57577d/collection/47739249-705ab6b6-daf4-44a4-8ca7-57e063f1bbcf?action=share&source=collection_link&creator=47739249"
+	},
+	"item": [
+		{
+			"name": "token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.collectionVariables.set(\"UtilityTokenDev\", jsonData.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "crm_client_create_service",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "de560eb9-24c6-44f4-9672-50fa0f2b0d2f",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://dev-account.cloudapper.com/connect/token?grant_type=client_credentials&client_id=identity_client_dev&client_secret=IRY7ZLCLRSYY6VDKZAYJMKLWQOJAWX7Z",
+					"protocol": "https",
+					"host": [
+						"dev-account",
+						"cloudapper",
+						"com"
+					],
+					"path": [
+						"connect",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials"
+						},
+						{
+							"key": "client_id",
+							"value": "identity_client_dev"
+						},
+						{
+							"key": "client_secret",
+							"value": "IRY7ZLCLRSYY6VDKZAYJMKLWQOJAWX7Z"
+						}
+					]
+				},
+				"description": "## Endpoint Description\n\nThis endpoint is used to obtain an access token using the Client Credentials Grant flow in OAuth 2.0. The access token is required for authenticating API requests on behalf of a client application.\n\n### Request Format\n\n- **Method**: POST\n    \n- **URL**: `https://dev-account.cloudapper.com/connect/token?grant_type=client_credentials&client_id=identity_client_dev&client_secret=IRY7ZLCLRSYY6VDKZAYJMKLWQOJAWX7Z`\n    \n- **Content-Type**: `application/x-www-form-urlencoded`\n    \n\n#### Request Body\n\nThe request body is expected to be empty for this specific call, as indicated by the payload `{}`.\n\n### Response Structure\n\nUpon a successful request, the response will return a JSON object with the following structure:\n\n- **access_token**: A string representing the token that can be used for subsequent authenticated requests.\n    \n- **expires_in**: An integer indicating the lifetime of the access token in seconds.\n    \n- **token_type**: A string indicating the type of token issued (typically \"Bearer\").\n    \n- **scope**: A string representing the scope of access granted by the token.\n    \n\n### Example Response\n\n``` json\n{\n  \"access_token\": \"\",\n  \"expires_in\": 0,\n  \"token_type\": \"\",\n  \"scope\": \"\"\n}\n\n ```\n\nThis response indicates that the token has been successfully generated and is ready for use in further API calls."
+			},
+			"response": []
+		},
+		{
+			"name": "Upload file Cred ref",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Success is true\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Message is correct\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Result contains 'Created File.pdf'\", function () {\r",
+							"    pm.expect(jsonData.Result).to.equal(\"File Name: Created File.pdf Uploaded\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Actions contain expected values\", function () {\r",
+							"    pm.expect(jsonData.Actions).to.be.an('array').with.lengthOf(1);\r",
+							"\r",
+							"    let action = jsonData.Actions[0];\r",
+							"    pm.expect(action.ActionType).to.eql(\"RETURN_JSON\");\r",
+							"    pm.expect(action.IsOptional).to.eql(false);\r",
+							"\r",
+							"   \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"29ef758c-a371-416d-88fb-fb3abed5d300\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Files using SFTP (Direct Credentials)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message Type is 1\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Deleted File Name contains 'Created File.pdf'\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Created File.pdf deleted successfully.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"37454bb6-a35b-4374-be91-a37a9c20f873\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download Files using SFTP (Credential Reference)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Success is true\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Message is correct\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Actions contain expected values\", function () {\r",
+							"    pm.expect(jsonData.Actions).to.be.an('array').with.lengthOf(1);\r",
+							"\r",
+							"    let action = jsonData.Actions[0];\r",
+							"    pm.expect(action.ActionType).to.eql(\"RETURN_JSON\");\r",
+							"    pm.expect(action.IsOptional).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"File(s) Downloaded\", function () {\r",
+							"    pm.expect(jsonData.Result).to.be.oneOf([\"Single File Downloaded\", \"Multiple Files Downloaded\"], \r",
+							"        `Result is: ${jsonData.Result}`);\r",
+							"    console.log(\"Downloaded Result:\", jsonData.Result);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"f260c945-64af-4626-aa5d-8e84e0eed14a\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Convert to/from base64",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							" pm.test(\"Process executed successfully\", function () {\r",
+							"   pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"   \r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful\");\r",
+							"})\r",
+							"    \r",
+							"    "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"75b9beb8-3fb9-4609-ba0c-00c6d28debe1\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Report + Report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							" pm.test(\"Process executed successfully\", function () {\r",
+							"   pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"   \r",
+							"    pm.expect(jsonData.Result).to.equal(\"Report Generate + Report Attachment Successful\");\r",
+							"})\r",
+							"    \r",
+							"    \r",
+							"   "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"4808fb9f-ee7c-4b18-80e7-0fd4d5dc41d5\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Image Convertor + Write Content + Compress + Send SFTP (Single File)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Single File Sent to SFTP.\");\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"407ff107-768d-467c-9fcf-3571809a826c\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Image Convertor + Write Content + Compress + Send SFTP (Multi File)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"/*\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Body Fields\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"});\r",
+							"*/\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.include(\"Multiple Files Zipped & Sent to SFTP\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"6024a0c5-86bc-4ef1-9c85-e56915cf1c98\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST ALL Data Type + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							" pm.test(\"Process executed successfully\", function () {\r",
+							"   pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"   \r",
+							"    pm.expect(jsonData.Result).to.equal(\"Process Successful. Total REST Count: 10 Total File Count: 10\");\r",
+							"})\r",
+							"    \r",
+							"    \r",
+							"   "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"82f5ce47-6c12-4c69-a97c-dba8cd1dc1a2\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST ALL Data Type + Transform + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"   \r",
+							"});\r",
+							"\r",
+							" pm.test(\"Process executed successfully\", function () {\r",
+							"   pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"   \r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Record Created: True\");\r",
+							"})\r",
+							"    \r",
+							"    \r",
+							"   "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"82c1b48b-9fe5-4cb2-921e-45d0a9831623\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST ALL Data Type + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. REST Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"4a229569-8ce1-4965-906b-0b52b4284dcc\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST ALL Data Type + Create Node + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is record empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"4a3dd878-1ddf-4e4a-964e-4768466f7484\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST Array + Multi Fetch + Transform",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Records Created. Record Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"ebd6fda1-0b07-407d-8e96-5696c042e447\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST Array + Multi Fetch + Iterator",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Records Created. Record Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"13225a0b-be03-4433-a826-234df33622cd\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST Array + Single Fetch + Transform",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"92011fea-4b76-4f69-adbc-c9eddb00878c\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST Array + Single Fetch + Create Node",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"90982996-60ed-4f61-bad0-a7f7d8dec9c5\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser All Data Type + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Total Record Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"ed3d6927-ed8d-4688-a1bb-53493a4c9c7c\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser All Data Type + Transform + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Opearation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"b186ae12-008c-4f9f-8b9a-c92bab30748f\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser All Data Type + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Record Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"656ea0bd-b9c7-4b6a-bfb4-118e9192c22a\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser Array + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Record Count: 10. Parsed Count : 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"6c7d513d-935a-47be-a0dd-9b72aeddd7ab\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser Array + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Record Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"e3d8fd37-f251-4079-8301-600a9a7ae26e\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON Content Parser Array + Transform + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is record empty?: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"ff02ef79-6305-4971-9a8a-8e4e9507a672\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON File Parser + All Data Type + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 10. Transform Count: 10\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"8aa86337-70aa-4ef1-bfed-e6a3281a8ffa\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON File Parser + All Data Type + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 10.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"eb9ae43d-f813-4915-b980-df2fe1754a16\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON File Parser Array + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 10.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"f3830df0-7894-4719-905a-726ebc3ee05d\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON File Parser Array + Create Node + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is record empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"7a6514fb-8ba5-44b1-a4ac-f791d5cdd721\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML Content Parser ALL Data Type + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 3. Transform Count: 3\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"4172604f-3afb-4d6b-814e-5a547563446b\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML Content Parser ALL Data Type + Transform + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is record empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"4ad544ae-8250-466a-b68a-75daf6edfd2e\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML Content Parser ALL Data Type + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 3.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"08bc1e15-7cce-4330-8bec-a07f1b1e471e\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML Content Parser ALL Data Type + Create Node + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"80708ec0-2290-43dc-ac50-691ffebe2d32\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML File Parser ALL Data Types + Transform + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 3. Transform Count: 3\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"11baa0a2-b00e-45df-89a4-a30c20752b1a\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML File Parser ALL Data Types + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parsed Count: 3.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"0281c186-6fa6-4780-8ad2-bc5632b3e0d9\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML File Parser ALL Data Types + Create Noode + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"e0b46198-eb96-49cb-b169-fe91e0be4bce\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML File Parser ALL Data Types + Transform + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Parser Response Code: 200. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"b93a9d82-bb36-40f2-a6b3-fe014bfcb15f\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SOAP ALL DATA TYPE + Transformer + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Total SOAP Count: 3. Transform Count: 3\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"90b9e160-4e40-42f8-8b79-b8472072286f\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SOAP ALL DATA TYPE + Iterator + Multi Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Total SOAP Count: 3.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"f564a3df-ca4a-4dd6-a0be-41d797489d7b\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SOAP ALL DATA TYPE + Transformer + Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"78c0f4b5-7d65-451a-a0fe-f813c8f03a43\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SOAP ALL DATA TYPE + Create Node+ Single Fetch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Is Record Empty: False\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"7a9ea5c1-5091-4106-9640-5f865b68579f\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Javits Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Authorization Success.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"243434d9-2f67-4126-a165-567371616f0c\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CSV  Generate + CSV Parser Local SAVE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Generated CSV: YES. CSV Parsed: YES. Parsed Count: 100. Record Count: 100\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"0f9c6252-ad77-466b-ad83-9045cc0f4ce4\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Excel  Generate + Excel Parser Local SAVE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Generated Excel: YES. Excel Parsed: YES. Parsed Count: 100. Record Count: 100\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"a5183163-f1f4-42a0-a360-c1dd922c7db3\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manipulate PDF Form extended controls",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. PDF Fetched: YES. PDF Manipulated: YES\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"0db52087-405a-42ad-88b9-11ac677ac07e\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File to Image Converter + S3 + Local Save",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Response Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Message type is 1\", function () {\r",
+							"    pm.expect(jsonData.MessageType).to.eql(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is Success\", function () {\r",
+							"    pm.expect(jsonData.Success).to.eql(true);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ResponseCode is 200\", function () {\r",
+							"    pm.expect(jsonData.ResponseCode).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Process executed successfully\", function () {\r",
+							"    pm.expect(jsonData.Message).to.eql(\"Process executed successfully.\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Operation Successful\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.Result).to.equal(\"Operation Successful. Connector Response Code: 200. File Created: image/png.\");\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{UtilityTokenDev}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ca-app-id",
+						"value": "{{AppID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-id",
+						"value": "{{ClientID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-platform",
+						"value": "{{ClientPlatform}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-client-version",
+						"value": "{{ClientVersion}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-device-session-id",
+						"value": "76330d4e-58ac-4010-b2bc-e535a486eb3e",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-timezone-id",
+						"value": "Asia/Dhaka",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-id",
+						"value": "{{UserID}}",
+						"type": "text"
+					},
+					{
+						"key": "x-ca-user-name",
+						"value": "{{UserName}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"AutomationId\":\"9a7f2fbd-3471-4d96-bc5a-8221a3eb3d77\",\"Variables\":{}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{URL}}/api/v3/Workflows/run",
+					"protocol": "https",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"Workflows",
+						"run"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "UtilityTokenDev",
+			"value": ""
+		},
+		{
+			"key": "URL",
+			"value": "dev-api.cloudapper.com"
+		},
+		{
+			"key": "UserName",
+			"value": "Sakiba Nurain Nahar"
+		},
+		{
+			"key": "UserID",
+			"value": "337d26f6-51c7-4b1c-a9ec-24b299785e77"
+		},
+		{
+			"key": "AppID",
+			"value": "8a94e8ed-c2c0-464a-bd34-a9ebbbb66aa9"
+		},
+		{
+			"key": "ClientID",
+			"value": "1715073300001607"
+		},
+		{
+			"key": "ClientVersion",
+			"value": "7.2.0.63"
+		},
+		{
+			"key": "ClientPlatform",
+			"value": "3"
+		}
+	]
+}
